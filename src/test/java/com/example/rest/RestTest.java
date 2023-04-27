@@ -20,23 +20,30 @@ public class RestTest {
 	public void testSimpleJavaClass() {
 		assertThat(restTemplate).isNotNull();
 		
-		String url = "https://api.jdoodle.com/v1/execute";
 		String clientId = "888902e60aea0fc7631f470674a19d3a";
 		String clientSecret = "91c267cac73efbea688457cb674d6b4cc307f02072925c75c97ab378e8effa64";
+		String url = "https://api.jdoodle.com/v1/execute";
 		String script = """
 				public class Test {
+				
+					public static int add(int a, int b) {
+						return a + b;
+					}
 					public static void main(String[] args) {
-					    System.out.println("aloha 2023");
+						int a = Integer.parseInt(args[0]);
+						int b = Integer.parseInt(args[1]);
+					    System.out.println(add(a, b));
 					}
 				}
 				
 				""";
-		String stdIn = "";
+		String args = "900 2000";
+		String stdin = "";
 		String language = "java";
 		String versionIndex = "0";
-		boolean compileOnly = true;
+		boolean compileOnly = false;
 		Request request = new Request(clientId, clientSecret, script, 
-				stdIn, language, versionIndex, compileOnly);
+				args, stdin, language, versionIndex, compileOnly);
 		
 		Response response = restTemplate.postForObject(url, request, Response.class);
 		
