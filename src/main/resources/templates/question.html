@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<title>Question</title>
+</head>
+<body>
+
+<h1>Question?</h1>
+
+Question: <h4 th:text="${question.text}"></h4>
+
+Session ID : <span th:text="${sessionId}"></span>
+
+<form method="post" action="submitAnswer">
+<table>
+<tr>
+	<td>Script</td>
+</tr>
+</table>
+</form>
+
+</body>
+</html>
