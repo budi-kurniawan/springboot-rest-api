@@ -1,0 +1,30 @@
+As a Java developer at JDoodle, your task is to develop a web app using Spring Boot that tests 
+user’s programming knowledge. The app will have a problem bank of at least 10 programming questions, 
+each with 5 test cases to validate the answers (stored in a db). 
+The app will display 5 random programming problems one by one from the problem bank to the user. 
+Once the user submits answers to all the problems, the app will display a detailed result page 
+showing what test cases their program passed and failed.
+
+As this is a backend developer role, keep the front end simple.
+
+There are two roles in the application - admin and user. Admins should be able to create problems. 
+Users take the tests.
+
+To accomplish this, you'll need to integrate a simple editor that allows users to type and test their programs.
+ Once the user submits all their answers, you should use JDoodle's REST API (server to server) to test each 
+ answer against the test cases and display the results. (Note: JDoodle has a free API plan).
+
+Feel free to add additional features such as login, saving the results, etc. - it is completely up to 
+your imagination and how many features you want to add.
+
+
+Your solution should include clear documentation of your design decisions, alternative approaches considered, 
+and any technical challenges encountered during development. Additionally, you should provide instructions 
+on any additional features that you think would enhance the user experience.
+
+
+You can get inspiration/ideas from JDoodle’s Assignment section and HackerRank.
+
+Feel free to reach out if you have any questions. Please submit by 28th April.
+
+Good luck with the project!
