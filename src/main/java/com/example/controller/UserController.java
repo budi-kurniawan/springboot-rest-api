@@ -33,7 +33,7 @@ import com.example.util.Util;
 public class UserController {
 
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
-	private static final int NUM_TO_ANSWER = 2; // TODO move to properties file
+	private static final int NUM_TO_ANSWER = 5; // TODO move to properties file
 	private static final int NUM_THREADS = 100;
 	
 	@Autowired

@@ -49,12 +49,10 @@ public class AdminController {
 
 	@PostMapping("/addQuestion")
 	public ModelAndView saveQuestion(@ModelAttribute SimpleQuestion simpleQuestion, Model model) {
-		log.info("uploaded:" + simpleQuestion);
 		String arguments = simpleQuestion.arguments();
 		String output = simpleQuestion.output();
 		
 		String[] args = arguments.split("\n");
-		log.info("args length" + args.length);
 		String[] outputs = output.split("\n");
 		int minLength = Math.min(args.length, outputs.length);
 		List<TestCase> testCases = new ArrayList<>();
