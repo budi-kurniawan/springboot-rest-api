@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.example.dao.QuestionRepository;
 import com.example.entity.Question;
+import com.example.entity.TestCase;
+import com.example.model.SimpleQuestion;
 
 @RestController
 public class AdminController {
@@ -46,30 +48,24 @@ public class AdminController {
 	}
 
 	@PostMapping("/addQuestion")
-	public ModelAndView saveQuestion(@ModelAttribute Question question, Model model) {
-		question.setTestCases(new ArrayList<>());
-		log.info("user added this question " + question);
+	public ModelAndView saveQuestion(@ModelAttribute SimpleQuestion simpleQuestion, Model model) {
+		log.info("uploaded:" + simpleQuestion);
+		String arguments = simpleQuestion.arguments();
+		String output = simpleQuestion.output();
+		
+		String[] args = arguments.split("\n");
+		log.info("args length" + args.length);
+		String[] outputs = output.split("\n");
+		int minLength = Math.min(args.length, outputs.length);
+		List<TestCase> testCases = new ArrayList<>();
+		for (int i = 0; i < minLength; i++) {
+			testCases.add(new TestCase(args[i], outputs[i]));
+		}
+		Question question = new Question(simpleQuestion.text(), simpleQuestion.template(), testCases);
 		questionRepository.save(question);
 		return getModelAndViewForAdmin();
 	}
 
-	@GetMapping("/testCases/{questionId}")
-	public ModelAndView addTestCases(@PathVariable String questionId) {
-		ModelAndView mav = new ModelAndView();
-		Question question = questionRepository.findById(Long.parseLong(questionId));
-		mav.setViewName("testCases");
-		mav.addObject("question", question);
-		return mav;
-	}
-
-	@PostMapping("/testCases")
-	public ModelAndView saveTestCases(@ModelAttribute Question question, Model model) {
-		question.setTestCases(new ArrayList<>());
-		log.info("user added this question " + question);
-		questionRepository.save(question);
-		return getModelAndViewForAdmin();
-	}
-	
 	private ModelAndView getModelAndViewForAdmin() {
 		List<Question> questions = (List<Question>) questionRepository.findAll();
 		ModelAndView mav = new ModelAndView();

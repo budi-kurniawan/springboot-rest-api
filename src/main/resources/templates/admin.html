@@ -37,7 +37,6 @@ th, td {
     <td th:text="${question.template}" />
     <td th:text="${question.testCases}" />
     <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">delete</a></td>
-    <td><a th:href="@{/testCases/{questionId}(questionId=${question.id})}">test cases</a></td>
 </tr>
 </table>
 
