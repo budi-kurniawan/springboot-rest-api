@@ -51,7 +51,7 @@ public class EvaluationTask implements Callable<Response>{
 			if (question == null) {
 				return new Response("System error. Question not found", "", "", "", "");
 			} else {
-				Set<TestCase> testCases = question.getTestCases();
+				List<TestCase> testCases = question.getTestCases();
 				for (TestCase testCase : testCases) {
 					String args = testCase.getInput();
 					String expected = testCase.getOutput();

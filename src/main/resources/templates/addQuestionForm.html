@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<title>Admin - Add Question</title>
+</head>
+<body>
+
+<h1>Add Questions</h1>
+<p>
+<a href="/admin">Back to Admin page</a>
+</p>
+
+<form action="#" th:action="@{/addQuestion}" th:object="${question}" method="post">
+<table>
+<tr>
+	<td>Text:</td>
+	<td><textarea cols=80 rows=15 name='text'></textarea></td>
+</tr>
+<tr>
+	<td>Template:</td>
+	<td><textarea cols=80 rows=15 name='template'></textarea></td>
+</tr>
+<tr>
+	<td></td>
+	<td><input type="submit"/></td>
+</tr>
+</table>
+</form>
+Each test case has two components, arguments and output. Each component must be put in square brackets. For example,
+if arguments are 0 and 1 and output is -1, write the following:
+[0 1][-1].
+
+If no output is expected, leave the bracket blank: [0 1][].
+
+
+</body>
+</html>

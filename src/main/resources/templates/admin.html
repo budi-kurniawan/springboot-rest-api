@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="https://thymeleaf.org">
+<head>
+<title>Admin</title>
+</head>
+<body>
+<style>
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  border-color: #96D4D4;
+}
+</style>
+
+<h1>Manage Questions</h1>
+<p>
+<a href="/">Back to Welcome page</a>
+</p>
+<p>
+<a href="/addQuestion">Add Question</a>
+</p>
+
+<p>
+<table>
+<tr>
+	<td>ID</td>
+	<td>Question</td>
+	<td>Template</td>
+	<td>Test Cases</td>
+	<td>Delete</td>
+</tr>
+<tr th:each="question: ${questions}">
+    <td th:text="${question.id}" />
+    <td th:text="${question.text}" />
+    <td th:text="${question.template}" />
+    <td th:text="${question.testCases}" />
+    <td><a th:href="@{/deleteQuestion/{id}(id=${question.id})}">delete</a></td>
+    <td><a th:href="@{/testCases/{questionId}(questionId=${question.id})}">test cases</a></td>
+</tr>
+</table>
+
+</p>
+
+
+</body>
+</html>

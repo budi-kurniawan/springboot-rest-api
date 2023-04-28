@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -97,7 +98,7 @@ public class Application {
 					}
 					""";
 			for (int i = 1; i < 11; i++) {
-				repository.save(new Question("Write method " + i, template1, Set.of(new TestCase("1 2", "3"),
+				repository.save(new Question("Write method " + i, template1, List.of(new TestCase("1 2", "3"),
 						new TestCase("100 20", "120"),
 						new TestCase("10 30", "40"),
 						new TestCase("-1 10", "9"),

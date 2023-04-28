@@ -15,7 +15,6 @@ public class Response{
 	private String questionText;
 
 	public Response() {
-		
 	}
 	public Response(String output, String statusCode, String memory, String cpuTime, String compilationStatus) {
 		this.output = output;

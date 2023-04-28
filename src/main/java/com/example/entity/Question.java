@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -28,15 +29,17 @@ public class Question {
 	private String template;
 	
 	@OneToMany(mappedBy="question", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
-	private Set<TestCase> testCases;
+	private List<TestCase> testCases;
 
 	protected Question() {}
 
-	public Question(String text, String template, Set<TestCase> testCases) {
+	public Question(String text, String template, List<TestCase> testCases) {
 		this.text = text;
 		this.template = template;
 		this.testCases = testCases;
-		testCases.forEach(e -> e.setQuestion(this));
+		if (testCases != null) {
+			testCases.forEach(e -> e.setQuestion(this));
+		}
 	}
 
 	@Override
@@ -58,7 +61,14 @@ public class Question {
 		return template;
 	}
 
-	public Set<TestCase> getTestCases() {
+	public List<TestCase> getTestCases() {
 		return testCases;
+	}
+	
+	public void setTestCases(List<TestCase> testCases) {
+		this.testCases = testCases;
+		if (testCases != null) {
+			testCases.forEach(e -> e.setQuestion(this));
+		}
 	}
 }
