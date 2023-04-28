@@ -4,7 +4,15 @@
 <title>That's It!</title>
 </head>
 <body>
-
+<style>
+table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  border-color: #96D4D4;
+}
+</style>
 <h1>Congratulations</h1>
 
 <h4>Session ID : <span th:text="${sessionId}"></span></h4>
@@ -12,6 +20,10 @@
 
 <a href="/">Start over</a>
 
-
+<table>
+<tr th:each="response: ${responses}">
+    <td th:text="${response.output}" />
+</tr>
+</table>
 </body>
 </html>

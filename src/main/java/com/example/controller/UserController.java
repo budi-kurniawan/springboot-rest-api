@@ -1,8 +1,13 @@
 package com.example.controller;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -11,27 +16,33 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.dao.AnswerRepository;
 import com.example.dao.QuestionRepository;
 import com.example.entity.Answer;
 import com.example.entity.Question;
+import com.example.model.Request;
+import com.example.model.Response;
 import com.example.util.Util;
 
 @Controller
 public class UserController {
 
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);
-
+	private static final int NUM_TO_ANSWER = 2; // TODO move to properties file
+	private static final int NUM_THREADS = 100;
+	
 	@Autowired
 	private QuestionRepository questionRepository;
 
 	@Autowired
 	private AnswerRepository answerRepository;
+	
+	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 	
 	@RequestMapping("/user")
 	public String index() {
@@ -51,8 +62,8 @@ public class UserController {
 
 		List<Answer> answers = answerRepository.findBySessionId(answer.getSessionId());
 		int numAnswers = answers.size();
-		if (numAnswers >= 5) { // TODO move 5 to properties file
-			return finalise(answer.getSessionId(), answers);
+		if (numAnswers == NUM_TO_ANSWER) {
+			return evaluate(answer.getSessionId(), questions, answers);
 		}
 		
 		// show another question by choosing a question that has not been answered
@@ -69,12 +80,27 @@ public class UserController {
 		return mav;
 	}
 	
-	private ModelAndView finalise(String sessionId, List<Answer> answers) {
+	private ModelAndView evaluate(String sessionId, List<Question> questions, List<Answer> answers) {
+		log.info("start evaluating");
+		List<Response> responses = new ArrayList<>();
+		RestTemplate restTemplate = new RestTemplate();
+		for (Answer answer : answers) {
+			Callable<Response> task = new EvaluationTask(questions, answer, restTemplate);
+			Future<Response> future = executor.submit(task);
+			try {
+				Response response = future.get();
+				log.info("return from future.get()" + response.output());
+				responses.add(response);
+			} catch(InterruptedException | ExecutionException e) {
+				log.error(e.getMessage());
+			}
+		}
+				
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("final");
+		mav.setViewName("evaluate");
 		mav.addObject("sessionId", sessionId);
+		mav.addObject("responses", responses);
 		return mav;
-		
 	}
 
 }
