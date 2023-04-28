@@ -1,5 +1,6 @@
 package com.example.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +15,8 @@ public class Answer {
 	private Long id;
 	private String sessionId;
 	private Long questionId;
+	
+	@Column(columnDefinition = "TEXT")
 	private String script;
 	
 	protected Answer() {}
@@ -45,5 +48,17 @@ public class Answer {
 	
 	public String getScript() {
 		return script;
-	}	
+	}
+	
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+	
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
+	}
+	
+	public void setScript(String script) {
+		this.script = script;
+	}
 }

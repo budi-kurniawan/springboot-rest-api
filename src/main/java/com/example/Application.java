@@ -27,20 +27,20 @@ public class Application {
 		SpringApplication.run(Application.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-		return args -> {
-
-			System.out.println("Let's inspect the beans provided by Spring Boot:");
-
-			String[] beanNames = ctx.getBeanDefinitionNames();
-			Arrays.sort(beanNames);
-			for (String beanName : beanNames) {
-				System.out.println(beanName);
-			}
-
-		};
-	}
+//	@Bean
+//	public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+//		return args -> {
+//
+//			System.out.println("Let's inspect the beans provided by Spring Boot:");
+//
+//			String[] beanNames = ctx.getBeanDefinitionNames();
+//			Arrays.sort(beanNames);
+//			for (String beanName : beanNames) {
+//				System.out.println(beanName);
+//			}
+//
+//		};
+//	}
 	
 //	@Bean
 //	public CommandLineRunner demo(UserRepository repository) {
@@ -83,17 +83,26 @@ public class Application {
 	@Bean
 	public CommandLineRunner addQuestions(QuestionRepository repository) {
 		return (args) -> {
-			// save a few users
-			repository.save(new Question("add method", Set.of(new TestCase("1 2", "3"),
-					new TestCase("100 20", "120"),
-					new TestCase("10, 30", "40"),
-					new TestCase("-1 10", "9"),
-					new TestCase("-100 -100", "-200"))));
-			repository.save(new Question("subtract method", Set.of(new TestCase("1 2", "-1"),
-					new TestCase("100 20", "80"),
-					new TestCase("10, 30", "-20"),
-					new TestCase("-1 10", "-11"),
-					new TestCase("-100 -100", "0"))));
+			// save a few questions
+			String template1 = """
+					public class MyClass {
+						public static int m(int a, int b) {
+							// your implementation here
+						}
+						public static void main(String[] args) {
+							int a = Integer.parseInt(args[0]);
+							int b = Integer.parseInt(args[1]);
+							System.out.println(m(a, b));
+						}
+					}
+					""";
+			for (int i = 1; i < 11; i++) {
+				repository.save(new Question("Write method " + i, template1, Set.of(new TestCase("1 2", "3"),
+						new TestCase("100 20", "120"),
+						new TestCase("10, 30", "40"),
+						new TestCase("-1 10", "9"),
+						new TestCase("-100 -100", "-200"))));				
+			}
 
 			// fetch all questions
 			log.info("Questions found with findAll():");

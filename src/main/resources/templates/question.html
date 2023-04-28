@@ -5,16 +5,22 @@
 </head>
 <body>
 
-<h1>Question?</h1>
+<h1>Question <span th:text="${questionNo}"></span></h1>
+<h4> <span th:text="${question.text}"></span></h4>
 
-Question: <h4 th:text="${question.text}"></h4>
+<h4>Session ID : <span th:text="${sessionId}"></span></h4>
 
-Session ID : <span th:text="${sessionId}"></span>
-
-<form method="post" action="submitAnswer">
+<form action="#" th:action="@{/question}" th:object="${question}" method="post">
+<input type="hidden" th:value="${sessionId}" name="sessionId" />
+<input type="hidden" th:value="${question.id}" name="questionId" />
 <table>
 <tr>
-	<td>Script</td>
+	<td>Your program:</td>
+	<td><textarea cols=80 rows=25 th:text="${question.template}" name='script'></textarea></td>
+</tr>
+<tr>
+	<td></td>
+	<td><input type="submit"/></td>
 </tr>
 </table>
 </form>

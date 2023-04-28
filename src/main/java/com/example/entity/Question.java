@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -19,15 +20,21 @@ public class Question {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
+
+	@Column(columnDefinition = "TEXT")
 	private String text;
+	
+	@Column(columnDefinition = "TEXT")
+	private String template;
 	
 	@OneToMany(mappedBy="question", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private Set<TestCase> testCases;
 
 	protected Question() {}
 
-	public Question(String text, Set<TestCase> testCases) {
+	public Question(String text, String template, Set<TestCase> testCases) {
 		this.text = text;
+		this.template = template;
 		this.testCases = testCases;
 		testCases.forEach(e -> e.setQuestion(this));
 	}
@@ -47,6 +54,10 @@ public class Question {
 		return text;
 	}
 	
+	public String getTemplate() {
+		return template;
+	}
+
 	public Set<TestCase> getTestCases() {
 		return testCases;
 	}
