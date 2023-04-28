@@ -20,8 +20,8 @@ public class RestTest {
 	public void testSimpleJavaClass() {
 		assertThat(restTemplate).isNotNull();
 		
-		String clientId = "888902e60aea0fc7631f470674a19d3a";
-		String clientSecret = "91c267cac73efbea688457cb674d6b4cc307f02072925c75c97ab378e8effa64";
+		String clientId = "";
+		String clientSecret = "";
 		String url = "https://api.jdoodle.com/v1/execute";
 		String script = """
 				public class Test {

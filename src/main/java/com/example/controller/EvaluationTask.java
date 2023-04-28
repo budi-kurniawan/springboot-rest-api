@@ -21,18 +21,22 @@ public class EvaluationTask implements Callable<Response>{
 	private RestTemplate restTemplate;
 	private List<Question> questions;
 	private Answer answer;
-	String clientId = "888902e60aea0fc7631f470674a19d3a";
-	String clientSecret = "91c267cac73efbea688457cb674d6b4cc307f02072925c75c97ab378e8effa64";
-	String url = "https://api.jdoodle.com/v1/execute";
-	String stdin = "";
-	String language = "java";
-	String versionIndex = "0";
+	private String clientId;
+	private String clientSecret;
+	private String url;
+	private String stdin = "";
+	private String language = "java";
+	private String versionIndex = "0";
 
 	
-	public EvaluationTask(List<Question> questions, Answer answer, RestTemplate restTemplate) {
+	public EvaluationTask(List<Question> questions, Answer answer, RestTemplate restTemplate,
+			String clientId, String clientSecret, String url) {
 		this.questions = questions;
 		this.answer = answer;
 		this.restTemplate = restTemplate;
+		this.clientId = clientId;
+		this.clientSecret = clientSecret;
+		this.url = url;
 	}
 	
 	@Override
@@ -55,12 +59,10 @@ public class EvaluationTask implements Callable<Response>{
 				for (TestCase testCase : testCases) {
 					String args = testCase.getInput();
 					String expected = testCase.getOutput();
-					log.info("args:" + args + ", expected:" + expected + ", length:" + expected.length());
 					request = new Request(clientId, clientSecret, script, 
 							args, stdin, language, versionIndex, compileOnly);
 					response = restTemplate.postForObject(url, request, Response.class);
 					if (expected.equals(response.getOutput().trim())) {
-						log.info("increment correctAnswers");
 						correctAnswers++;
 					}
 				}

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +26,6 @@ import com.example.dao.AnswerRepository;
 import com.example.dao.QuestionRepository;
 import com.example.entity.Answer;
 import com.example.entity.Question;
-import com.example.model.Request;
 import com.example.model.Response;
 import com.example.util.Util;
 
@@ -44,6 +44,15 @@ public class UserController {
 	
 	private ExecutorService executor = Executors.newFixedThreadPool(NUM_THREADS);
 	
+	@Value("${jdoodle.clientId}")
+	private String clientId;
+
+	@Value("${jdoodle.clientSecret}")
+	private String clientSecret;
+
+	@Value("${jdoodle.url}")
+	private String url;
+
 	@RequestMapping("/user")
 	public String index() {
 		return "user";
@@ -81,11 +90,12 @@ public class UserController {
 	}
 	
 	private ModelAndView evaluate(String sessionId, List<Question> questions, List<Answer> answers) {
-		log.info("start evaluating");
+		log.info("start evaluating. client id:" + clientId);
 		List<Response> responses = new ArrayList<>();
 		RestTemplate restTemplate = new RestTemplate();
 		for (Answer answer : answers) {
-			Callable<Response> task = new EvaluationTask(questions, answer, restTemplate);
+			Callable<Response> task = new EvaluationTask(questions, answer, restTemplate, 
+					clientId, clientSecret, url);
 			Future<Response> future = executor.submit(task);
 			try {
 				Response response = future.get();
