@@ -41,7 +41,9 @@ public class Application {
 					}
 					""";
 			for (int i = 1; i < 11; i++) {
-				repository.save(new Question("Write method " + i, template1, List.of(new TestCase("1 2", "3"),
+				repository.save(new Question("Write a method called m" + i + " that adds two ints. "
+						+ "Pass the arguments to your main method as shown in the template." , 
+						template1, List.of(new TestCase("1 2", "3"),
 						new TestCase("100 20", "120"),
 						new TestCase("10 30", "40"),
 						new TestCase("-1 10", "9"),
