@@ -1,6 +1,10 @@
 package com.example.controller;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,64 +40,41 @@ public class UserController {
 	
 	@RequestMapping("/question")
 	public ModelAndView showQuestion(@ModelAttribute Answer answer, Model model) {
-		log.info("submitted answer:" + answer);
 		boolean starting = answer.getSessionId() == null;
-		log.info("starting:" + starting);
 		if (starting) {
-			log.info("=------ create new session id");
 			answer.setSessionId(Util.createSessionId());
 		} else {
 			answerRepository.save(answer);
 		}
 		List<Question> questions = (List<Question>) questionRepository.findAll();
-		
+		questions.stream().mapToLong(e -> e.getId());
+
 		List<Answer> answers = answerRepository.findBySessionId(answer.getSessionId());
-		
 		int numAnswers = answers.size();
-		log.info("num of answers:" + numAnswers);
-		if (numAnswers >= 5) {
-			return finalise(answer);
+		if (numAnswers >= 5) { // TODO move 5 to properties file
+			return finalise(answer.getSessionId(), answers);
 		}
 		
-		
-		int questionNo = numAnswers + 1;
-		
-		Question question = questions.get(4);
-		
+		// show another question by choosing a question that has not been answered
+		Set<Long> answeredQuestionIds = answers.stream().map(e -> e.getQuestionId()).collect(Collectors.toSet());
+		log.info("answered question ids:" + answeredQuestionIds);
+		List<Question> unusedQuestions = questions.stream().filter(e -> !answeredQuestionIds.contains(e.getId())).collect(Collectors.toList());
+		int randomIndex = ThreadLocalRandom.current().nextInt(0, unusedQuestions.size()); // 0 to size-1
+		Question question = unusedQuestions.get(randomIndex);
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("question");
 		mav.addObject("question", question);
-		mav.addObject("questionNo", questionNo);
+		mav.addObject("questionNo", numAnswers + 1);
 		mav.addObject("sessionId", answer.getSessionId());
 		return mav;
 	}
 	
-	private ModelAndView finalise(Answer answer) {
+	private ModelAndView finalise(String sessionId, List<Answer> answers) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("final");
-		mav.addObject("sessionId", answer.getSessionId());
+		mav.addObject("sessionId", sessionId);
 		return mav;
 		
-	}
-
-	
-	@GetMapping("/submitAnswer")
-	public String submitAnswer() {
-		// TODO
-		// getAllQuestions
-		// getAllAnswers having the same sessionId
-		
-		// if len(questions) < len(answers) 
-		// abort
-		
-		// if len(answers) < 4, save answer, select a random question and display the question
-		
-		
-		// if len(answers) == 4, save answer, then look up JDoodle REST API, show results
-		
-		StringBuilder sb = new StringBuilder(1000);
-		
-		return "Users:" + sb.toString();
 	}
 
 }
