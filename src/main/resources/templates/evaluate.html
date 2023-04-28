@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://thymeleaf.org">
 <head>
-<title>That's It!</title>
+<title>Your results</title>
 </head>
 <body>
 <style>
@@ -13,17 +13,31 @@ th, td {
   border-color: #96D4D4;
 }
 </style>
+
 <h1>Congratulations</h1>
 
-<h4>Session ID : <span th:text="${sessionId}"></span></h4>
-
-
-<a href="/">Start over</a>
-
+<p>
 <table>
+<tr>
+	<td>Question</td>
+	<td>Result</td>
+</tr>
 <tr th:each="response: ${responses}">
+    <td th:text="${response.questionText}" />
     <td th:text="${response.output}" />
 </tr>
 </table>
+
+</p>
+
+<p>
+<h4>Your Session ID is <span th:text="${sessionId}"></span></h4>
+Write this down to view the result in the future.
+
+</p>
+<p>
+<a href="/">Start over</a>
+</p>
+
 </body>
 </html>

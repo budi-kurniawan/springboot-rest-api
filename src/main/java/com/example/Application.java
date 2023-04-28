@@ -99,7 +99,7 @@ public class Application {
 			for (int i = 1; i < 11; i++) {
 				repository.save(new Question("Write method " + i, template1, Set.of(new TestCase("1 2", "3"),
 						new TestCase("100 20", "120"),
-						new TestCase("10, 30", "40"),
+						new TestCase("10 30", "40"),
 						new TestCase("-1 10", "9"),
 						new TestCase("-100 -100", "-200"))));				
 			}

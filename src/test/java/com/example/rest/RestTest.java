@@ -48,7 +48,7 @@ public class RestTest {
 		Response response = restTemplate.postForObject(url, request, Response.class);
 		
 		System.out.println(response);
-		System.out.println(response.output());
+		System.out.println(response.getOutput());
 		
 		
 	}

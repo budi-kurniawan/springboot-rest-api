@@ -89,7 +89,6 @@ public class UserController {
 			Future<Response> future = executor.submit(task);
 			try {
 				Response response = future.get();
-				log.info("return from future.get()" + response.output());
 				responses.add(response);
 			} catch(InterruptedException | ExecutionException e) {
 				log.error(e.getMessage());
